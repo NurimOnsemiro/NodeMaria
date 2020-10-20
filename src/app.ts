@@ -1,9 +1,8 @@
-import mariadb, { createPool, PoolConnection } from 'mariadb';
+import { createPool, PoolConnection } from 'mariadb';
 import fs from 'fs';
 import path from 'path';
 
 const dbName: string = 'test';
-const tableNameList: string[] = ['user_account'];
 
 const pool = createPool({
     host: '127.0.0.1',
