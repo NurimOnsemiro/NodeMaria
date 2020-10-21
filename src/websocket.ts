@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 
 import { default as objSample } from '../assets/object_sample.json';
+import { sleepMs, filetimeFromDate } from './utils';
 
 let ws: WebSocket;
 let isOpen: boolean = false;
@@ -47,18 +48,6 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
         console.log('[WSCLOSE]');
         console.log(`code : ${code}, reason : ${reason}`);
     });
-}
-
-async function sleepMs(ms: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve();
-        }, ms);
-    });
-}
-
-function filetimeFromDate() {
-    return Date.now() * 1e4 + 116444736e9;
 }
 
 export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: number) {
