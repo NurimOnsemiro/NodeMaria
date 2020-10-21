@@ -1,0 +1,15 @@
+{
+    "ref_device_id": 57,
+    "date": "2020-10-21 14:12:00",
+    "hour": 0,
+    "evt_start": 0,
+    "evt_end": 0,
+    "evt_obj_count": 0,
+    "roi_appear": 0,
+    "roi_loitering": 0,
+    "roi_crowd_small": 0,
+    "roi_crowd_large": 0,
+    "roi_line_crossing_in": 0,
+    "roi_line_crossing_out": 0,
+    "roi_people_counting": 0
+}
