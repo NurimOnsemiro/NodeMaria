@@ -1,0 +1,83 @@
+{
+    "cmd": 300,
+    "sms_serial": 0,
+    "vms_id": 100001,
+    "grp_serial": 1,
+    "dev_serial": 107023,
+    "dch_ch": 0,
+    "dchm_serial": 0,
+    "utc": true,
+    "utc_offset": "+09:00",
+    "object": {
+        "sms_objid": 22804,
+        "objectId": 22804,
+        "org_tcl": 132191358900253170,
+        "start_time": 132191358900253170,
+        "end_time": 132191359029771020,
+        "thumbnail_time": 132191358900253170,
+        "score": 0.9996500015258789,
+        "ref_event_id": 64,
+        "classify": {
+            "label": "PERSON or PEOPLE",
+            "attribute": {
+                "color": [
+                    {
+                        "refColor": 3056,
+                        "r": 213,
+                        "g": 229,
+                        "b": 239,
+                        "h": 203,
+                        "s": 11,
+                        "v": 94,
+                        "rate": 69.62,
+                        "img_h": 459,
+                        "img_w": 542,
+                        "left": 135,
+                        "top": 253,
+                        "width": 236,
+                        "height": 100
+                    },
+                    {
+                        "refColor": 3056,
+                        "r": 28,
+                        "g": 18,
+                        "b": 35,
+                        "h": 275,
+                        "s": 49,
+                        "v": 14,
+                        "rate": 17.97,
+                        "img_h": 459,
+                        "img_w": 542,
+                        "left": 135,
+                        "top": 253,
+                        "width": 236,
+                        "height": 100
+                    },
+                    {
+                        "refColor": 3056,
+                        "r": 124,
+                        "g": 50,
+                        "b": 84,
+                        "h": 332,
+                        "s": 60,
+                        "v": 49,
+                        "rate": 12.41,
+                        "img_h": 459,
+                        "img_w": 542,
+                        "left": 135,
+                        "top": 253,
+                        "width": 236,
+                        "height": 100
+                    }
+                ],
+                "thumbRect": {
+                    "x": 0.5838541666666667,
+                    "y": 0.5388888888888889,
+                    "w": 0.2822916666666666,
+                    "h": 0.425
+                }
+            }
+        },
+        "thumbnail": ""
+    }
+}
