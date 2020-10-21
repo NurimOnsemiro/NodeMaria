@@ -31,10 +31,14 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
     });
 
     ws.on('message', data => {
-        console.log('[WSMESSAGE]');
         let objData = JSON.parse(data.toString('utf8'));
+        if (objData.cmd === 301) {
+            return;
+        }
+        console.log('[WSMESSAGE]');
         if (objData.cmd === 101) {
             callback(objData.res.masSerial);
+            return;
         }
     });
 
