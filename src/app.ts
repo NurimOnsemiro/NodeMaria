@@ -1,46 +1,58 @@
-import { createPool, PoolConnection } from 'mariadb';
-import fs from 'fs';
-import path from 'path';
-
-const dbName: string = 'test';
-
-const pool = createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'pass',
-    connectionLimit: 5,
-    database: dbName,
-    multipleStatements: true,
-});
-
-async function executeQuery(query: string, param: any[] = null) {
-    let conn: PoolConnection;
-    let queryResult: object[];
-    try {
-        conn = await pool.getConnection();
-        queryResult = await conn.query(query, param);
-    } catch (ex) {
-        throw {
-            message: ex.message,
-        };
-    } finally {
-        if (conn) conn.release();
-    }
-    return queryResult;
-}
+import { executeQuery, initDb } from './mariadb';
+import * as ws from './websocket';
 
 async function main() {
-    let query: string = fs.readFileSync(path.join(process.cwd(), './assets/dbinit.sql')).toString('utf8');
-    console.log('[DBINIT]');
-    console.log(query);
-    await executeQuery(query);
-
-    let queryResult: object[];
-    queryResult = await executeQuery('SELECT * FROM user_account');
-    for (let userInfo of queryResult) {
-        console.log(userInfo);
+    if (process.argv.length < 3) {
+        console.log('./nodemaria.exe [websocket/mariadb/restapi]');
+        process.exit(0);
     }
-    await pool.end();
-    console.log('Program End');
+
+    let jobTypeSet = new Set<string>(['websocket', 'mariadb', 'restapi']);
+    let jobType: string = process.argv[2];
+    if (jobTypeSet.has(jobType) === false) {
+        console.log('Job type is not valid; your input : ' + jobType);
+        process.exit(0);
+    }
+
+    console.log('Job Type : ' + jobType);
+
+    switch (jobType) {
+        case 'websocket': {
+            if (process.argv.length !== 6) {
+                console.log('./nodemaria.exe websocket [MAM IP] [MAS IP] [Insert Interval (ms)]');
+                process.exit(0);
+            }
+
+            let mamIp: string = process.argv[3];
+            let masIp: string = process.argv[4];
+            let insertIntervalMs: number = Number(process.argv[5]);
+            if (isNaN(insertIntervalMs)) {
+                console.log('insertIntervalMs is not valid; your input : ' + process.argv[5]);
+                process.exit(0);
+            }
+
+            ws.startWebSocket(mamIp, masIp, (masSerial: number) => {
+                ws.sendObjectDataLoop(masSerial, insertIntervalMs);
+            });
+            break;
+        }
+        case 'mariadb': {
+            await initDb();
+
+            let queryResult: object[];
+            queryResult = await executeQuery('SELECT * FROM user_account');
+            for (let userInfo of queryResult) {
+                console.log(userInfo);
+            }
+            break;
+        }
+        case 'restapi': {
+            break;
+        }
+        default: {
+            console.log('Job type is not valid; your input : ' + jobType);
+            process.exit(0);
+        }
+    }
 }
 main();
