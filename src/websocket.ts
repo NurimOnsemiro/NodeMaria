@@ -1,6 +1,8 @@
 import WebSocket from 'ws';
+import moment from 'moment';
 
 import { default as objSample } from '../assets/object_sample.json';
+import { default as evtSample } from '../assets/event_sample.json';
 import { sleepMs, filetimeFromDate } from './utils';
 
 let ws: WebSocket;
@@ -33,7 +35,7 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
 
     ws.on('message', data => {
         let objData = JSON.parse(data.toString('utf8'));
-        if (objData.cmd === 301) {
+        if (objData.cmd === 301 || objData.cmd === 305) {
             return;
         }
         console.log('[WSMESSAGE]');
@@ -62,6 +64,35 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
         ws.send(JSON.stringify(objSample));
+        await sleepMs(insertIntervalMs);
+    }
+}
+
+function getRandomValue() {
+    return Math.floor(Math.random() * 100);
+}
+
+export async function sendEventDataLoop(masSerial: number, insertIntervalMs: number) {
+    console.log('[SENDEVT] Ready');
+    await sleepMs(3000);
+    console.log('[SENDEVT] Start');
+
+    evtSample.mas_serial = masSerial;
+
+    while (isOpen) {
+        console.log('[SENDEVT] Sending');
+        evtSample.event.date = moment().format('YYYY-MM-DD');
+        evtSample.event.hour = Number(moment().format('HH'));
+        evtSample.event.evt_start = 10000000;
+        evtSample.event.evt_end = evtSample.event.evt_start;
+        evtSample.event.roi_appear = getRandomValue();
+        evtSample.event.roi_loitering = getRandomValue();
+        evtSample.event.roi_crowd_small = getRandomValue();
+        evtSample.event.roi_crowd_large = getRandomValue();
+        evtSample.event.roi_line_crossing_in = getRandomValue();
+        evtSample.event.roi_line_crossing_out = getRandomValue();
+        evtSample.event.roi_people_counting = getRandomValue();
+        ws.send(JSON.stringify(evtSample));
         await sleepMs(insertIntervalMs);
     }
 }
