@@ -84,6 +84,9 @@ let dataSample = {
         '{"thumbnail":"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","thumbnailRect":{"x":0.5838541666666667,"y":0.5388888888888889,"w":0.2822916666666666,"h":0.425}}',
 };
 
+/**
+ * INFO: 한번에 10개 삽입하는 쿼리
+ */
 function createInsertQuery(): string {
     let preQuery;
 
@@ -122,7 +125,7 @@ export async function startObjectInsertLoop(insertIntervalMs: number) {
     console.log('[INSERTOBJ] Ready');
     objSample.mas_serial = 0;
     let bulkQuery: string = createInsertQuery();
-    console.log(bulkQuery);
+    //console.log(bulkQuery);
     await sleepMs(3000);
     console.log('[INSERTOBJ] Start');
 
@@ -131,4 +134,30 @@ export async function startObjectInsertLoop(insertIntervalMs: number) {
         await executeQuery(bulkQuery);
         await sleepMs(insertIntervalMs);
     }
+}
+
+/**
+ * 특정 개수만큼 레코드 삽입
+ * @param numRecords 삽입할 행 개수
+ */
+export async function startObjectInsertCount(numRecords: number) {
+    console.log('[INSERTOBJCNT] Ready');
+    objSample.mas_serial = 0;
+    let bulkQuery: string = createInsertQuery();
+    await sleepMs(3000);
+    console.log('[INSERTOBJCNT] Start');
+
+    let cnt = Math.round(numRecords / 10);
+    console.time('mariadbcnt');
+    for (let i = 0; i < cnt; i++) {
+        await executeQuery(bulkQuery);
+    }
+    console.timeEnd('mariadbcnt');
+    console.log('[INSERTOBJCNT] Finish');
+}
+
+export function getBulkQuery() {
+    objSample.mas_serial = 0;
+    let bulkQuery: string = createInsertQuery();
+    return bulkQuery;
 }

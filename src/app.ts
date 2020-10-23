@@ -1,13 +1,16 @@
-import { executeQuery, initDb, startObjectInsertLoop } from './mariadb';
+import { executeQuery, initDb, startObjectInsertLoop, startObjectInsertCount, getBulkQuery } from './mariadb';
+import { Worker, WorkerOptions } from 'worker_threads';
 import * as ws from './websocket';
+import path from 'path';
+import { exit } from 'process';
 
 async function main() {
     if (process.argv.length < 3) {
-        console.log('./nodemaria.exe [websocket/mariadb/restapi]');
+        console.log('./nodemaria.exe [websocket/mariadb/mariadbcnt/mariadbcntthread/restapi]');
         process.exit(0);
     }
 
-    let jobTypeSet = new Set<string>(['websocket', 'mariadb', 'restapi']);
+    let jobTypeSet = new Set<string>(['websocket', 'mariadb', 'mariadbcnt', 'mariadbcntthread', 'restapi']);
     let jobType: string = process.argv[2];
     if (jobTypeSet.has(jobType) === false) {
         console.log('Job type is not valid; your input : ' + jobType);
@@ -53,6 +56,60 @@ async function main() {
             await initDb(dbIp, dbName);
 
             await startObjectInsertLoop(insertIntervalMs);
+
+            break;
+        }
+        case 'mariadbcnt': {
+            if (process.argv.length !== 5) {
+                console.log('./nodemaria.exe mariadbcnt [DB IP] [Insert Count]');
+                process.exit(0);
+            }
+
+            let dbIp: string = process.argv[3];
+            let dbName: string = 'mamobject2';
+            let numRecords: number = Number(process.argv[4]);
+
+            await initDb(dbIp, dbName);
+
+            await startObjectInsertCount(numRecords);
+
+            process.exit(0);
+
+            break;
+        }
+        case 'mariadbcntthread': {
+            if (process.argv.length !== 6) {
+                console.log('./nodemaria.exe mariadbcntthread [DB IP] [Insert Count] [Thread Count]');
+                process.exit(0);
+            }
+
+            let dbIp: string = process.argv[3];
+            let dbName: string = 'mamobject2';
+            let numRecords: number = Number(process.argv[4]);
+            let numThreads: number = Number(process.argv[5]);
+            numRecords = numRecords / numThreads;
+
+            let bulkQuery = getBulkQuery();
+
+            console.log('Start thread');
+            let currCnt = 0;
+            console.time('thread');
+            for (let i = 0; i < numThreads; i++) {
+                let worker = new Worker(path.join(process.cwd(), './src/worker.js'));
+                worker.postMessage({
+                    numRecords: numRecords,
+                    dbIp: dbIp,
+                    dbName: dbName,
+                    bulkQuery: bulkQuery,
+                });
+                worker.on('message', value => {
+                    currCnt++;
+                    if (currCnt === numThreads) {
+                        console.timeEnd('thread');
+                        process.exit(0);
+                    }
+                });
+            }
 
             break;
         }
