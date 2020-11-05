@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { default as objSample } from '../assets/object_sample.json';
 import { default as evtSample } from '../assets/event_sample.json';
+import { default as evtDetailSample } from '../assets/event_detail_sample.json';
 import { sleepMs, filetimeFromDate } from './utils';
 
 let ws: WebSocket;
@@ -22,6 +23,7 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
         ws.send(
             JSON.stringify({
                 cmd: 100,
+                masSerial: 5,
                 masIP: masIp,
                 masPort: '8002',
                 masVersion: '1.6.0.999999',
@@ -93,6 +95,27 @@ export async function sendEventDataLoop(masSerial: number, insertIntervalMs: num
         evtSample.event.roi_line_crossing_out = getRandomValue();
         evtSample.event.roi_people_counting = getRandomValue();
         ws.send(JSON.stringify(evtSample));
+        await sleepMs(insertIntervalMs);
+    }
+}
+
+let eventTypeSet = [1, 2, 4, 8, 16, 32, 64];
+
+export async function sendEventDetailDataLoop(masSerial: number, insertIntervalMs: number) {
+    console.log('[SENDEVTDT] Ready');
+    await sleepMs(3000);
+    console.log('[SENDEVTDT] Start');
+
+    evtDetailSample.mas_serial = masSerial;
+
+    while (isOpen) {
+        console.log('[SENDEVTDT] Sending');
+        evtDetailSample.event_detail.evt_start = filetimeFromDate();
+        evtDetailSample.event_detail.evt_end = evtDetailSample.event_detail.evt_start;
+        evtDetailSample.event_detail.ref_event_id = eventTypeSet[getRandomValue() % 7];
+        evtDetailSample.event_detail.roi_preset = getRandomValue();
+        evtDetailSample.event_detail.roi_event_zone = getRandomValue();
+        ws.send(JSON.stringify(evtDetailSample));
         await sleepMs(insertIntervalMs);
     }
 }

@@ -1,0 +1,21 @@
+{
+    "cmd": 302,
+    "mas_serial": 2,
+    "vms_id": 100000,
+    "grp_serial": 1,
+    "dev_serial": 100001,
+    "dch_ch": 0,
+    "dchm_serial": 0,
+    "type": 0,
+    "sub_type": 9,
+    "event_detail": {
+        "evt_start": 1604555491,
+        "evt_end": 1604555491,
+        "object_id": 100,
+        "ref_event_id": 16,
+        "roi_preset": 5,
+        "roi_event_zone": 3,
+        "param_1": 1,
+        "param_2": 7
+    }
+}
