@@ -115,6 +115,9 @@ export async function sendEventDetailDataLoop(masSerial: number, insertIntervalM
         evtDetailSample.event_detail.ref_event_id = eventTypeSet[getRandomValue() % 7];
         evtDetailSample.event_detail.roi_preset = getRandomValue();
         evtDetailSample.event_detail.roi_event_zone = getRandomValue();
+        evtDetailSample.event_detail.object_id = getRandomValue();
+        evtDetailSample.event_detail.param_1 = getRandomValue();
+        evtDetailSample.event_detail.param_2 = getRandomValue();
         ws.send(JSON.stringify(evtDetailSample));
         await sleepMs(insertIntervalMs);
     }
