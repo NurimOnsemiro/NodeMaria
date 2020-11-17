@@ -110,12 +110,12 @@ export async function sendEventDetailDataLoop(masSerial: number, insertIntervalM
 
     while (isOpen) {
         console.log('[SENDEVTDT] Sending');
-        evtDetailSample.event_detail.evt_start = filetimeFromDate();
-        evtDetailSample.event_detail.evt_end = evtDetailSample.event_detail.evt_start;
+        evtDetailSample.event_detail.startTime = filetimeFromDate();
+        evtDetailSample.event_detail.endTime = evtDetailSample.event_detail.startTime;
         evtDetailSample.event_detail.ref_event_id = eventTypeSet[getRandomValue() % 7];
-        evtDetailSample.event_detail.roi_preset = getRandomValue();
-        evtDetailSample.event_detail.roi_event_zone = getRandomValue();
-        evtDetailSample.event_detail.object_id = getRandomValue();
+        evtDetailSample.event_detail.presetNo = getRandomValue();
+        evtDetailSample.event_detail.zoneID = getRandomValue();
+        evtDetailSample.event_detail.objectID = getRandomValue();
         evtDetailSample.event_detail.param_1 = getRandomValue();
         evtDetailSample.event_detail.param_2 = getRandomValue();
         ws.send(JSON.stringify(evtDetailSample));

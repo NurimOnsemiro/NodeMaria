@@ -9,12 +9,12 @@
     "type": 0,
     "sub_type": 9,
     "event_detail": {
-        "evt_start": 1604555491,
-        "evt_end": 1604555491,
-        "object_id": 100,
+        "startTime": 1604555491,
+        "endTime": 1604555491,
+        "objectID": 100,
         "ref_event_id": 16,
-        "roi_preset": 5,
-        "roi_event_zone": 3,
+        "presetNo": 5,
+        "zoneID": 3,
         "param_1": 1,
         "param_2": 7
     }
