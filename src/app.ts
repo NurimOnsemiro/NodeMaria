@@ -21,14 +21,16 @@ async function main() {
 
     switch (jobType) {
         case 'websocket': {
-            if (process.argv.length !== 6) {
-                console.log('./nodemaria.exe websocket [MAM IP] [MAS IP] [Insert Interval (ms)]');
+            if (process.argv.length < 6) {
+                console.log('./nodemaria.exe websocket [MAM IP] [MAS IP] [Insert Interval (ms)] [The number of records (default: infinity)]');
                 process.exit(0);
             }
 
             let mamIp: string = process.argv[3];
             let masIp: string = process.argv[4];
             let insertIntervalMs: number = Number(process.argv[5]);
+            //INFO: 삽입할 레코드 개수
+            let numInsertRecords: number = Number(process.argv[6]);
             if (isNaN(insertIntervalMs)) {
                 console.log('insertIntervalMs is not valid; your input : ' + process.argv[5]);
                 process.exit(0);
@@ -37,7 +39,7 @@ async function main() {
             ws.startWebSocket(mamIp, masIp, (masSerial: number) => {
                 //ws.sendObjectDataLoop(masSerial, insertIntervalMs);
                 //ws.sendEventDataLoop(masSerial, insertIntervalMs);
-                ws.sendEventDetailDataLoop(masSerial, insertIntervalMs);
+                ws.sendEventDetailDataLoop(masSerial, insertIntervalMs, numInsertRecords);
             });
             break;
         }
