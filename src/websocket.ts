@@ -54,41 +54,70 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
     });
 }
 
-export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: number) {
+export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: number, numInsertRecords: number = null) {
     console.log('[OBJ] Ready');
     await sleepMs(3000);
     console.log('[OBJ] Start');
 
     objSample.mas_serial = masSerial;
 
-    while (isOpen) {
-        console.log('[OBJ] Sending');
+    if (numInsertRecords == null) {
+        numInsertRecords = -1;
+    }
+
+    let cnt: number = 0;
+
+    while (isOpen && cnt !== numInsertRecords) {
+        if (cnt % 10 === 0) {
+            console.log(`[OBJ] Sending - ${cnt}/${numInsertRecords}`);
+        }
+
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
         ws.send(JSON.stringify(objSample));
         await sleepMs(insertIntervalMs);
+        cnt++;
     }
+
+    console.log('[OBJ] Send Finish');
+    process.exit(0);
 }
 
 function getRandomValue() {
     return Math.floor(Math.random() * 100);
 }
 
-export async function sendEventDataLoop(masSerial: number, insertIntervalMs: number) {
+export async function sendEventDataLoop(masSerial: number, insertIntervalMs: number, numInsertRecords: number = null) {
     console.log('[EVT] Ready');
     await sleepMs(3000);
     console.log('[EVT] Start');
 
     evtSample.mas_serial = masSerial;
 
-    while (isOpen) {
-        console.log('[EVT] Sending');
-        evtSample.event.date = moment().format('YYYY-MM-DD');
-        evtSample.event.hour = Number(moment().format('HH'));
-        evtSample.event.evt_start = 10000000;
-        evtSample.event.evt_end = evtSample.event.evt_start;
+    if (numInsertRecords == null) {
+        numInsertRecords = -1;
+    }
+
+    let cnt: number = 0;
+    //INFO: 20년 전
+    let startDate: number = Date.now() - 1000 * 60 * 60 * 24 * 365 * 18;
+    //INFO: 1시간 단위
+    let hourUnit: number = 1000 * 60 * 60;
+
+    let incDate = startDate;
+
+    while (isOpen && cnt !== numInsertRecords) {
+        if (cnt % 100 === 0) {
+            console.log(`[EVT] Sending - ${cnt}/${numInsertRecords}`);
+        }
+
+        let momentData = moment(incDate);
+        evtSample.event.date = momentData.format('YYYY-MM-DD');
+        evtSample.event.hour = Number(momentData.format('HH'));
+        evtSample.event.evt_obj_count = getRandomValue();
         evtSample.event.roi_appear = getRandomValue();
         evtSample.event.roi_loitering = getRandomValue();
+        evtSample.event.roi_stationary_status = getRandomValue();
         evtSample.event.roi_crowd_small = getRandomValue();
         evtSample.event.roi_crowd_large = getRandomValue();
         evtSample.event.roi_line_crossing_in = getRandomValue();
@@ -96,7 +125,12 @@ export async function sendEventDataLoop(masSerial: number, insertIntervalMs: num
         evtSample.event.roi_people_counting = getRandomValue();
         ws.send(JSON.stringify(evtSample));
         await sleepMs(insertIntervalMs);
+        cnt++;
+        incDate += hourUnit;
     }
+
+    console.log('[EVT] Send Finish');
+    process.exit(0);
 }
 
 let eventTypeSet = [1, 2, 4, 8, 16, 32, 64];
