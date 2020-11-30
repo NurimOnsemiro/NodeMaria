@@ -12,6 +12,27 @@ let isOpen: boolean = false;
 // let masIp: string = '255.255.255.255';
 //let insertIntervalMs: number = 2000;
 
+const labelList: string[] = [
+    'PERSON',
+    'MAN',
+    'OLD_MAN',
+    'WOMAN',
+    'OLD_WOMAN',
+    'BOY',
+    'GIRL',
+    'VEHICLE',
+    'CAR',
+    'BUS',
+    'TAXI',
+    'TRUCK',
+    'VAN',
+    'BICYCLE',
+    'MOTORBIKE',
+    'WHEELCHAIR',
+];
+
+const eventList: number[] = [1, 2, 4, 8, 16, 32, 64];
+
 export function startWebSocket(mamIp: string, masIp: string, callback: Function) {
     ws = new WebSocket(`ws://${mamIp}:3001`);
 
@@ -74,6 +95,9 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
 
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
+        objSample.object.classify.label = labelList[getRandomValue() % labelList.length];
+        objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
+        objSample.object.score = Math.random();
         ws.send(JSON.stringify(objSample));
         await sleepMs(insertIntervalMs);
         cnt++;
@@ -84,7 +108,7 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
 }
 
 function getRandomValue() {
-    return Math.floor(Math.random() * 100);
+    return Math.round(Math.random() * 100);
 }
 
 export async function sendEventDataLoop(masSerial: number, insertIntervalMs: number, numInsertRecords: number = null) {
