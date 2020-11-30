@@ -98,6 +98,7 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
         objSample.object.classify.label = labelList[getRandomValue() % labelList.length];
         objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
         objSample.object.score = Math.random();
+        objSample.object.objectId = Math.round(Math.random() * 100000);
         ws.send(JSON.stringify(objSample));
         await sleepMs(insertIntervalMs);
         cnt++;
