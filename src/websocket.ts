@@ -28,7 +28,18 @@ const labelList: string[] = [
     'VAN',
     'BICYCLE',
     'MOTORBIKE',
-    'WHEELCHAIR',
+    'VESSEL',
+    'SMALL_FISHINGBOAT',
+    'LARGE_FISHINGBOAT',
+    'MERCHANTSHIP',
+    'WARSHIP',
+    'UNCONFIRMED_SHIP',
+    'SUBMARINE',
+    'BOAT',
+    'YACHT',
+    'FERRY',
+    'PATROLSHIP',
+    'SHIPLIGHT',
 ];
 
 const eventList: number[] = [1, 2, 4, 8, 16, 32, 64];
@@ -125,7 +136,8 @@ export async function sendEventDataLoop(masSerial: number, insertIntervalMs: num
 
     let cnt: number = 0;
     //INFO: 20년 전
-    let startDate: number = Date.now() - 1000 * 60 * 60 * 24 * 365 * 18;
+    //let startDate: number = Date.now() - 1000 * 60 * 60 * 24 * 365 * 18;
+    let startDate: number = Date.now();
     //INFO: 1시간 단위
     let hourUnit: number = 1000 * 60 * 60;
 
