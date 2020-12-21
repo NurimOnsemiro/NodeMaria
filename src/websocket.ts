@@ -5,6 +5,7 @@ import { default as objSample } from '../assets/object_sample.json';
 import { default as evtSample } from '../assets/event_sample.json';
 import { default as evtDetailSample } from '../assets/event_detail_sample.json';
 import { sleepMs, filetimeFromDate } from './utils';
+import { default as chState } from '../assets/channel_state.json';
 
 let ws: WebSocket;
 let isOpen: boolean = false;
@@ -55,10 +56,10 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
         ws.send(
             JSON.stringify({
                 cmd: 100,
-                masSerial: 5,
+                masSerial: 1,
                 masIP: masIp,
                 masPort: '8002',
-                masVersion: '1.6.0.999999',
+                masVersion: '1.6.10.201020(jjcw)',
                 masPath: 'C:\\MAS',
                 masStatus: 1,
                 masIPEx: '',
@@ -84,6 +85,36 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
         console.log('[WS.CLOSE]');
         console.log(`code : ${code}, reason : ${reason}`);
     });
+}
+
+export async function sendChannelState(masSerial: number) {
+    console.log('[CHST] Ready');
+    await sleepMs(3000);
+    console.log('[CHST] Start');
+
+    chState.masSerial = masSerial;
+
+    let cnt: number = 0;
+
+    setInterval(async () => {
+        chState.noti.CHStatus[0].dbIndex = 2253;
+        chState.noti.CHStatus[0].devSerial = 100001;
+        chState.noti.CHStatus[0].dchCH = 0;
+        chState.noti.CHStatus[0].dchmSerial = 0;
+        chState.noti.CHStatus[0].grpSerial = 0;
+        chState.noti.CHStatus[0].frameIn = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].frameOut = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].frameProc = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].evtStart = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].evtEnd = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].objSend = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].objBox = Math.round(Math.random() * 1000);
+        chState.noti.CHStatus[0].saveThumbnail = Math.round(Math.random() * 1000);
+
+        ws.send(JSON.stringify(chState));
+        cnt++;
+        console.log(`[CHST] Sending - ${cnt}}`);
+    }, 5000);
 }
 
 export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: number, numInsertRecords: number = null) {
