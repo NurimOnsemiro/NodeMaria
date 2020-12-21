@@ -1,0 +1,24 @@
+{
+    "masSerial": 1,
+    "cmd": 6003,
+    "msg": "",
+    "noti": {
+        "CHStatus": [
+            {
+                "dbIndex": 0,
+                "devSerial": 0,
+                "dchCH": 0,
+                "dchmSerial": 0,
+                "grpSerial": 0,
+                "frameIn": 0,
+                "frameOut": 0,
+                "frameProc": 0,
+                "evtStart": 0,
+                "evtEnd": 0,
+                "objSend": 0,
+                "objBox": 0,
+                "saveThumbnail": 0
+            }
+        ]
+    }
+}
