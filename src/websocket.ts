@@ -56,7 +56,7 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
         ws.send(
             JSON.stringify({
                 cmd: 100,
-                masSerial: 1,
+                masSerial: 2,
                 masIP: masIp,
                 masPort: '8002',
                 masVersion: '1.6.10.201020(jjcw)',
@@ -97,7 +97,7 @@ export async function sendChannelState(masSerial: number) {
     let cnt: number = 0;
 
     setInterval(async () => {
-        chState.noti.CHStatus[0].dbIndex = 2253;
+        chState.noti.CHStatus[0].dbIndex = 53;
         chState.noti.CHStatus[0].devSerial = 100001;
         chState.noti.CHStatus[0].dchCH = 0;
         chState.noti.CHStatus[0].dchmSerial = 0;
@@ -135,6 +135,7 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
             console.log(`[OBJ] Sending - ${cnt}/${numInsertRecords}`);
         }
 
+        objSample.object.ref_label_id = makePeopleRefLabelId();
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
         objSample.object.classify.label = labelList[getRandomValue() % labelList.length];
@@ -234,4 +235,120 @@ export async function sendEventDetailDataLoop(masSerial: number, insertIntervalM
 
     console.log('[EVT.DT] Send Finish');
     process.exit(0);
+}
+
+const objectBit = {
+    people: {
+        value: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+        subset: {
+            gender: {
+                man: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                woman: 134217728, //0000 1000 0000 0000 0000 0000 0000 0000
+            },
+            age: {
+                child: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                teenager: 33554432, //0000 0010 0000 0000 0000 0000 0000 0000
+                adult: 67108864, //0000 0100 0000 0000 0000 0000 0000 0000
+                oldman: 100663296, //0000 0110 0000 0000 0000 0000 0000 0000
+            },
+            hat: {
+                no_hat: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                yes_hat: 16777216, //0000 0001 0000 0000 0000 0000 0000 0000
+            },
+            glasses: {
+                no_glasses: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                yes_glasses: 8388608, //0000 0000 1000 0000 0000 0000 0000 0000
+            },
+            top: {
+                long_top: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                short_top: 4194304, //0000 0000 0100 0000 0000 0000 0000 0000
+            },
+            pants: {
+                long_pants: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                short_pants: 2097152, //0000 0000 0010 0000 0000 0000 0000 0000
+            },
+            bag: {
+                no_bag: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                backpack: 262144, //0000 0000 0000 0100 0000 0000 0000 0000
+                handbag: 524288, //0000 0000 0000 1000 0000 0000 0000 0000
+                bag_etc: 1835008, //0000 0000 0001 1100 0000 0000 0000 0000
+            },
+            umbrella: {
+                no_umbrella: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                yes_umbrella: 131072, //0000 0000 0000 0010 0000 0000 0000 0000
+            },
+            mask: {
+                no_mask: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+                yes_mask: 4096, //0000 0000 0000 0000 0001 0000 0000 0000
+            },
+        },
+    },
+    vehicle: {
+        value: 268435456, //0001 0000 0000 0000 0000 0000 0000 0000
+    },
+    vessel: {
+        value: 536870912, //0010 0000 0000 0000 0000 0000 0000 0000
+    },
+};
+
+export function makePeopleRefLabelId() {
+    let result: number = 0;
+    let temp: number = 0;
+
+    temp = Math.random();
+    if (temp < 0.25) {
+        result |= objectBit.people.subset.age.child;
+    } else if (temp < 0.5) {
+        result |= objectBit.people.subset.age.teenager;
+    } else if (temp < 0.75) {
+        result |= objectBit.people.subset.age.adult;
+    } else {
+        result |= objectBit.people.subset.age.oldman;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.gender.woman;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.hat.yes_hat;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.glasses.yes_glasses;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.top.short_top;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.pants.short_pants;
+    }
+
+    temp = Math.random();
+    if (temp < 0.25) {
+        result |= objectBit.people.subset.bag.backpack;
+    } else if (temp < 0.5) {
+        result |= objectBit.people.subset.bag.handbag;
+    } else if (temp < 0.75) {
+        result |= objectBit.people.subset.bag.bag_etc;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.umbrella.yes_umbrella;
+    }
+
+    temp = Math.random();
+    if (temp >= 0.5) {
+        result |= objectBit.people.subset.mask.yes_mask;
+    }
+
+    return result;
 }

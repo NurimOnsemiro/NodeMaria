@@ -37,8 +37,8 @@ async function main() {
             }
 
             ws.startWebSocket(mamIp, masIp, (masSerial: number) => {
-                ws.sendChannelState(masSerial);
-                //ws.sendObjectDataLoop(masSerial, insertIntervalMs, numInsertRecords);
+                //ws.sendChannelState(masSerial);
+                ws.sendObjectDataLoop(masSerial, insertIntervalMs, numInsertRecords);
                 //ws.sendEventDataLoop(masSerial, insertIntervalMs, numInsertRecords);
                 //ws.sendEventDetailDataLoop(masSerial, insertIntervalMs, numInsertRecords);
             });
