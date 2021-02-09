@@ -18,7 +18,7 @@
         "thumbnail_time": 132191358900253170,
         "score": 0.9996500015258789,
         "ref_event_id": 64,
-        "ref_label_id": 0,
+        "ref_label_id": "9223372036854775807",
         "classify": {
             "label": "PERSON",
             "attribute": {

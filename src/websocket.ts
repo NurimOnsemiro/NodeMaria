@@ -135,11 +135,12 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
             console.log(`[OBJ] Sending - ${cnt}/${numInsertRecords}`);
         }
 
-        objSample.object.ref_label_id = makePeopleRefLabelId();
+        objSample.object.ref_label_id = makePeopleRefLabelId().toString(10);
+        objSample.object.ref_event_id = makeEventRefId();
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
         objSample.object.classify.label = labelList[getRandomValue() % labelList.length];
-        objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
+        //objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
         objSample.object.score = Math.random();
         objSample.object.objectId = Math.round(Math.random() * 100000);
         ws.send(JSON.stringify(objSample));
@@ -239,60 +240,60 @@ export async function sendEventDetailDataLoop(masSerial: number, insertIntervalM
 
 const objectBit = {
     people: {
-        value: 0, //0000 0000 0000 0000 0000 0000 0000 0000
+        value: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
         subset: {
             gender: {
-                man: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                woman: 134217728, //0000 1000 0000 0000 0000 0000 0000 0000
+                man: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                woman: 2n ** 49n, //0000 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             age: {
-                child: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                teenager: 33554432, //0000 0010 0000 0000 0000 0000 0000 0000
-                adult: 67108864, //0000 0100 0000 0000 0000 0000 0000 0000
-                oldman: 100663296, //0000 0110 0000 0000 0000 0000 0000 0000
+                child: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                teenager: 2n ** 47n, //0000 0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                adult: 2n ** 48n, //0000 0100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                oldman: 2n ** 47n + 2n ** 48n, //0000 0110 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             hat: {
-                no_hat: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                yes_hat: 16777216, //0000 0001 0000 0000 0000 0000 0000 0000
+                no_hat: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                yes_hat: 2n ** 46n, //0000 0001 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             glasses: {
-                no_glasses: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                yes_glasses: 8388608, //0000 0000 1000 0000 0000 0000 0000 0000
+                no_glasses: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                yes_glasses: 2n ** 45n, //0000 0000 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             top: {
-                long_top: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                short_top: 4194304, //0000 0000 0100 0000 0000 0000 0000 0000
+                long_top: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                short_top: 2n ** 44n, //0000 0000 0100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             pants: {
-                long_pants: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                short_pants: 2097152, //0000 0000 0010 0000 0000 0000 0000 0000
+                long_pants: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                short_pants: 2n ** 43n, //0000 0000 0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             bag: {
-                no_bag: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                backpack: 262144, //0000 0000 0000 0100 0000 0000 0000 0000
-                handbag: 524288, //0000 0000 0000 1000 0000 0000 0000 0000
-                bag_etc: 1835008, //0000 0000 0001 1100 0000 0000 0000 0000
+                no_bag: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                backpack: 2n ** 40n, //0000 0000 0000 0100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                handbag: 2n ** 41n, //0000 0000 0000 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                bag_etc: 2n ** 40n + 2n ** 41n + 2n ** 42n, //0000 0000 0001 1100 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             umbrella: {
-                no_umbrella: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                yes_umbrella: 131072, //0000 0000 0000 0010 0000 0000 0000 0000
+                no_umbrella: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                yes_umbrella: 2n ** 39n, //0000 0000 0000 0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
             mask: {
-                no_mask: 0, //0000 0000 0000 0000 0000 0000 0000 0000
-                yes_mask: 4096, //0000 0000 0000 0000 0001 0000 0000 0000
+                no_mask: 0n, //0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+                yes_mask: 2n ** 38n, //0000 0000 0000 0000 0001 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
             },
         },
     },
     vehicle: {
-        value: 268435456, //0001 0000 0000 0000 0000 0000 0000 0000
+        value: 2n ** 50n, //0001 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
     },
     vessel: {
-        value: 536870912, //0010 0000 0000 0000 0000 0000 0000 0000
+        value: 2n ** 51n, //0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
     },
 };
 
 export function makePeopleRefLabelId() {
-    let result: number = 0;
+    let result: bigint = 0n;
     let temp: number = 0;
 
     temp = Math.random();
@@ -350,5 +351,19 @@ export function makePeopleRefLabelId() {
         result |= objectBit.people.subset.mask.yes_mask;
     }
 
+    return result;
+}
+
+/**
+ * INFO: 이벤트 ID 조합값 생성
+ */
+export function makeEventRefId() {
+    let result: number = 0;
+
+    for (let i = 0; i < 8; i++) {
+        if (Math.random() > 0.5) {
+            result |= Math.pow(2, i);
+        }
+    }
     return result;
 }
