@@ -90,8 +90,8 @@ export const SchemaObject = new Schema({
     object_idx: { type: Number },
     mas_serial: { type: Number },
     object_id: { type: Number },
-    start_time: { type: Number },
-    end_time: { type: Number },
+    start_time: { type: Date },
+    end_time: { type: Date },
     ref_device_id: { type: Number },
     ref_label_id: { type: Number },
     ref_event_id: { type: Number },
@@ -102,7 +102,7 @@ export const SchemaObject = new Schema({
     attr_bag_pack: { type: Number },
     attr_bag_etc: { type: Number },
     attr_umbrella: { type: Number },
-    thumbnail_time: { type: Number },
+    thumbnail_time: { type: Date },
     thumbnail: { type: String },
     createdAt: { type: Date, expires: '300d', default: Date.now }, //300일후 자동 삭제
 });
@@ -203,18 +203,18 @@ class mongo_base {
             }
             dataSample.attr_bag_etc = getRandomValue(0, 1);
             dataSample.attr_score = Math.random();
-            dataSample.ref_label_id = labelIdList[labelIdList.length - 1];
-            dataSample.ref_event_id = eventIdList[eventIdList.length - 1];
-            dataSample.start_time = filetimeFromDate();
-            dataSample.end_time = filetimeFromDate();
+            dataSample.ref_label_id = labelIdList[getRandomValue(0, labelIdList.length - 1)];
+            dataSample.ref_event_id = eventIdList[getRandomValue(0, eventIdList.length - 1)];
+            dataSample.start_time = Date.now();
+            dataSample.end_time = Date.now();
             dataSample.attr_umbrella = getRandomValue(0, 1);
             dataSample.object_id = getRandomValue(0, 1000000);
-            dataSample.ref_attr_color1 = getRandomValue(0, 12000);
-            dataSample.ref_attr_color2 = getRandomValue(0, 12000);
-            dataSample.ref_attr_color3 = getRandomValue(0, 12000);
-            dataSample.ref_device_id = 1;
-            dataSample.mas_serial = getRandomValue(1, 100);
-            dataSample.thumbnail_time = filetimeFromDate();
+            dataSample.ref_attr_color1 = getRandomValue(0, 12) * 1000 + getRandomValue(0, 100);
+            dataSample.ref_attr_color2 = getRandomValue(0, 12) * 1000 + getRandomValue(0, 100);
+            dataSample.ref_attr_color3 = getRandomValue(0, 12) * 1000 + getRandomValue(0, 100);
+            dataSample.ref_device_id = getRandomValue(1, 600);
+            dataSample.mas_serial = getRandomValue(1, 12);
+            dataSample.thumbnail_time = Date.now();
 
             let newObjData: ISchemaObject = new ModelObject();
             for (let key in dataSample) {
