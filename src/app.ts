@@ -3,14 +3,15 @@ import { Worker, WorkerOptions } from 'worker_threads';
 import * as ws from './websocket';
 import path from 'path';
 import { exit } from 'process';
+import { mongoBase } from './mongodb';
 
 async function main() {
     if (process.argv.length < 3) {
-        console.log('./nodemaria.exe [websocket/mariadb/mariadbcnt/mariadbcntthread/restapi]');
+        console.log('./nodemaria.exe [websocket/mariadb/mongodb/mariadbcnt/mariadbcntthread/restapi]');
         process.exit(0);
     }
 
-    let jobTypeSet = new Set<string>(['websocket', 'mariadb', 'mariadbcnt', 'mariadbcntthread', 'restapi']);
+    let jobTypeSet = new Set<string>(['websocket', 'mariadb', 'mongodb', 'mariadbcnt', 'mariadbcntthread', 'restapi']);
     let jobType: string = process.argv[2];
     if (jobTypeSet.has(jobType) === false) {
         console.log('Job type is not valid; your input : ' + jobType);
@@ -61,6 +62,25 @@ async function main() {
             await initDb(dbIp, dbName);
 
             await startObjectInsertLoop(insertIntervalMs);
+
+            break;
+        }
+        case 'mongodb': {
+            if (process.argv.length !== 5) {
+                console.log('./nodemaria.exe mongodb [DB IP] [numData]');
+                process.exit(0);
+            }
+
+            let dbIp: string = process.argv[3];
+            let numData: number = Number(process.argv[4]);
+            if (isNaN(numData)) {
+                console.log('numData is not valid; your input : ' + process.argv[4]);
+                process.exit(0);
+            }
+
+            await mongoBase.init(dbIp);
+
+            await mongoBase.startObjectInsertCount(numData);
 
             break;
         }

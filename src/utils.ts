@@ -34,3 +34,8 @@ export function sleepTick(): Promise<void> {
         });
     });
 }
+
+export function getRandomValue(min: number, max: number) {
+    let diff = max - min;
+    return Math.round(Math.random() * diff + min);
+}
