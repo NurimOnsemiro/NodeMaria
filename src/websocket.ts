@@ -41,6 +41,12 @@ const labelList: string[] = [
     'FERRY',
     'PATROLSHIP',
     'SHIPLIGHT',
+    'HELMET',
+    'HEAD',
+    'MASK',
+    'INCIDENT',
+    'SMOKING',
+    'FIRE',
 ];
 
 const eventList: number[] = [1, 2, 4, 8, 16, 32, 64];
@@ -140,7 +146,7 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
         objSample.object.start_time = filetimeFromDate();
         objSample.object.end_time = objSample.object.start_time;
         objSample.object.classify.label = labelList[getRandomValue() % labelList.length];
-        //objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
+        objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
         objSample.object.score = Math.random();
         objSample.object.objectId = Math.round(Math.random() * 100000);
         ws.send(JSON.stringify(objSample));

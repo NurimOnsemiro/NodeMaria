@@ -1,5 +1,8 @@
 export async function sleepMs(ms: number): Promise<void> {
     return new Promise((resolve, reject) => {
+        if (ms === 0) {
+            resolve();
+        }
         setTimeout(() => {
             resolve();
         }, ms);
