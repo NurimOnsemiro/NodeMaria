@@ -4,7 +4,7 @@ import moment from 'moment';
 import { default as objSample } from '../assets/object_sample.json';
 import { default as evtSample } from '../assets/event_sample.json';
 import { default as evtDetailSample } from '../assets/event_detail_sample.json';
-import { sleepMs, filetimeFromDate } from './utils';
+import { sleepMs, filetimeFromDate, asyncWsSend, sleepTick } from './utils';
 import { default as chState } from '../assets/channel_state.json';
 
 let ws: WebSocket;
@@ -50,6 +50,7 @@ const labelList: string[] = [
 ];
 
 const eventList: number[] = [1, 2, 4, 8, 16, 32, 64];
+let recvDone: boolean = false;
 
 export function startWebSocket(mamIp: string, masIp: string, callback: Function) {
     ws = new WebSocket(`ws://${mamIp}:3001`);
@@ -75,8 +76,11 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
     });
 
     ws.on('message', data => {
+        // console.log('[GSHONG]');
+        // console.log(data);
         let objData = JSON.parse(data.toString('utf8'));
         if (objData.cmd === 301 || objData.cmd === 305) {
+            recvDone = true;
             return;
         }
         console.log('[WS.MESSAGE]');
@@ -149,10 +153,16 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
         objSample.object.ref_event_id = eventList[getRandomValue() % eventList.length];
         objSample.object.score = Math.random();
         objSample.object.objectId = Math.round(Math.random() * 100000);
-        ws.send(JSON.stringify(objSample));
+        recvDone = false;
+        await asyncWsSend(ws, JSON.stringify(objSample));
+        while (recvDone === false) {
+            await sleepTick();
+        }
         await sleepMs(insertIntervalMs);
         cnt++;
     }
+
+    await sleepMs(2000);
 
     console.log('[OBJ] Send Finish');
     process.exit(0);
