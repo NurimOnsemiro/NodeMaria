@@ -194,9 +194,10 @@ class mongo_base {
      */
     public async startObjectInsertCount(numRecords: number) {
         console.log('[INSERTOBJCNT] Ready');
+        console.time('MongoDBInsert');
         let docs: Document[] = [];
         for (let i = 0; i < numRecords; i++) {
-            if (i % 100 === 0) {
+            if (i % 300 === 0) {
                 console.log(`[OBJ] Inserting - ${i}/${numRecords}`);
                 await this.insertBulkDocuments(docs);
                 docs = [];
@@ -227,6 +228,7 @@ class mongo_base {
             await this.insertBulkDocuments(docs);
             docs = [];
         }
+        console.timeEnd('MongoDBInsert');
         console.log('[INSERTOBJCNT] Finish');
         process.exit(0);
     }
