@@ -8,7 +8,7 @@
 
 ### 명령어 종류
 - websocket [MAM IP] [MAS IP] [Insert Interval(ms)] [The number of records (default: infinity)]
-- mariadb
-- mongodb
-- mariadbcnt
-- mariadbcntthread
+- mariadb [DB IP] [DB name] [Insert Interval (ms)]
+- mongodb [DB IP] [The number of data]
+- mariadbcnt [DB IP] [The number of data]
+- mariadbcntthread [DB IP] [The number of data] [The number of threads]
