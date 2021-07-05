@@ -7,7 +7,7 @@
 - 웹소켓을 통해 MAM에게 데이터를 전달할 수 있습니다.
 
 ### 명령어 종류
-- websocket
+- websocket [MAM IP] [MAS IP] [Insert Interval(ms)] [The number of records (default: infinity)]
 - mariadb
 - mongodb
 - mariadbcnt
