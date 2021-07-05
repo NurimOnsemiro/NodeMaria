@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import autoIncrement from 'mongoose-auto-increment';
 import { default as objSample } from '../assets/object_sample.json';
@@ -11,9 +11,9 @@ import { makeEventRefId, makePeopleRefLabelId } from './websocket';
 let labelIdList = [
     100000,
     101000,
-    102000,
+    // 102000,
     103000,
-    104000,
+    // 104000,
     105000,
     106000,
     200000,
@@ -44,6 +44,8 @@ let labelIdList = [
     500000,
     501000,
     502000,
+    600000,
+    601000
 ];
 
 let eventIdList = [0, 1, 2, 4, 8, 16, 32, 64];
@@ -90,8 +92,8 @@ export const SchemaObject = new Schema({
     object_idx: { type: Number },
     mas_serial: { type: Number },
     object_id: { type: Number },
-    start_time: { type: Date },
-    end_time: { type: Date },
+    start_time: { type: Number }, //WARN: Date 타입으로 지정하면 검색이 안됨
+    end_time: { type: Number },
     ref_device_id: { type: Number },
     ref_label_id: { type: Number },
     ref_event_id: { type: Number },
@@ -102,9 +104,9 @@ export const SchemaObject = new Schema({
     attr_bag_pack: { type: Number },
     attr_bag_etc: { type: Number },
     attr_umbrella: { type: Number },
-    thumbnail_time: { type: Date },
+    thumbnail_time: { type: Number },
     thumbnail: { type: String },
-    createdAt: { type: Date, expires: '300d', default: Date.now }, //300일후 자동 삭제
+    createdAt: { type: Date, expires: '31d', default: Date.now },
 });
 
 export const enum EMongodbCollection {
@@ -196,18 +198,23 @@ class mongo_base {
         console.log('[INSERTOBJCNT] Ready');
         console.time('MongoDBInsert');
         let docs: Document[] = [];
+
+        let minDateNumber = new Date('2021-06-01T00:00:00.000Z').getTime();
+        let maxDateNumber = new Date('2021-06-30T23:59:59.999Z').getTime();
+
         for (let i = 0; i < numRecords; i++) {
             if (i % 300 === 0) {
                 console.log(`[OBJ] Inserting - ${i}/${numRecords}`);
                 await this.insertBulkDocuments(docs);
                 docs = [];
             }
+
             dataSample.attr_bag_etc = getRandomValue(0, 1);
             dataSample.attr_score = Math.random();
             dataSample.ref_label_id = labelIdList[getRandomValue(0, labelIdList.length - 1)];
             dataSample.ref_event_id = eventIdList[getRandomValue(0, eventIdList.length - 1)];
-            dataSample.start_time = Date.now();
-            dataSample.end_time = Date.now();
+            dataSample.start_time = getRandomValue(minDateNumber, maxDateNumber);
+            dataSample.end_time = dataSample.start_time;
             dataSample.attr_umbrella = getRandomValue(0, 1);
             dataSample.object_id = getRandomValue(0, 1000000);
             dataSample.ref_attr_color1 = getRandomValue(0, 12) * 1000 + getRandomValue(0, 100);
@@ -215,7 +222,7 @@ class mongo_base {
             dataSample.ref_attr_color3 = getRandomValue(0, 12) * 1000 + getRandomValue(0, 100);
             dataSample.ref_device_id = getRandomValue(1, 600);
             dataSample.mas_serial = getRandomValue(1, 12);
-            dataSample.thumbnail_time = Date.now();
+            dataSample.thumbnail_time = dataSample.start_time;
 
             let newObjData: ISchemaObject = new ModelObject();
             for (let key in dataSample) {

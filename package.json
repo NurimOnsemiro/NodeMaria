@@ -30,6 +30,7 @@
         "prettier": "^2.1.2"
     },
     "dependencies": {
+        "dayjs": "^1.10.5",
         "mariadb": "^2.5.0",
         "moment": "^2.29.1",
         "mongoose": "^5.12.3",

@@ -67,7 +67,7 @@ async function main() {
         }
         case 'mongodb': {
             if (process.argv.length !== 5) {
-                console.log('./nodemaria.exe mongodb [DB IP] [numData]');
+                console.log('./nodemaria.exe mongodb [DB IP] [The number of data]');
                 process.exit(0);
             }
 
@@ -86,7 +86,7 @@ async function main() {
         }
         case 'mariadbcnt': {
             if (process.argv.length !== 5) {
-                console.log('./nodemaria.exe mariadbcnt [DB IP] [Insert Count]');
+                console.log('./nodemaria.exe mariadbcnt [DB IP] [The number of data]');
                 process.exit(0);
             }
 
@@ -104,7 +104,7 @@ async function main() {
         }
         case 'mariadbcntthread': {
             if (process.argv.length !== 6) {
-                console.log('./nodemaria.exe mariadbcntthread [DB IP] [Insert Count] [Thread Count]');
+                console.log('./nodemaria.exe mariadbcntthread [DB IP] [The number of data] [The number of threads]');
                 process.exit(0);
             }
 
