@@ -83,7 +83,7 @@ export function startWebSocket(mamIp: string, masIp: string, callback: Function)
             recvDone = true;
             return;
         }
-        console.log('[WS.MESSAGE]');
+        console.log('[WS.MESSAGE] ' + JSON.stringify(data));
         if (objData.cmd === 101) {
             callback(objData.res.masSerial);
             return;
@@ -155,9 +155,9 @@ export async function sendObjectDataLoop(masSerial: number, insertIntervalMs: nu
         objSample.object.objectId = Math.round(Math.random() * 100000);
         recvDone = false;
         await asyncWsSend(ws, JSON.stringify(objSample));
-        while (recvDone === false) {
-            await sleepTick();
-        }
+        // while (recvDone === false) {
+        //     await sleepTick();
+        // }
         await sleepMs(insertIntervalMs);
         cnt++;
     }
