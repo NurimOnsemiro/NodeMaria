@@ -13,9 +13,14 @@
         "endTime": 1604555491,
         "objectID": 100,
         "ref_event_id": 16,
+        "vms_id": 100000,
+        "ref_global_event_id": 1,
         "presetNo": 5,
         "zoneID": 3,
+        "ref_service_code": 0,
         "param_1": 1,
-        "param_2": 7
+        "param_2": 7,
+        "dev_name": "My Device 장비 ★ 01",
+        "dch_name": "CH 01"
     }
 }
