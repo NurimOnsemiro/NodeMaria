@@ -1,9 +1,8 @@
-import { executeQuery, initDb, startObjectInsertLoop, startObjectInsertCount, getBulkQuery } from './mariadb';
-import { Worker, WorkerOptions } from 'worker_threads';
-import * as ws from './websocket';
 import path from 'path';
-import { exit } from 'process';
+import { Worker } from 'worker_threads';
+import { getBulkQuery, initDb, startObjectInsertCount, startObjectInsertLoop } from './mariadb';
 import { mongoBase } from './mongodb';
+import * as ws from './websocket';
 
 async function main() {
     if (process.argv.length < 3) {
