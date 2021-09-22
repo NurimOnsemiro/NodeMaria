@@ -18,8 +18,6 @@ export async function initDb(dbIp: string, dbName: string) {
         database: dbName,
         multipleStatements: true,
     });
-    //let query: string = fs.readFileSync(path.join(process.cwd(), './assets/dbinit.sql')).toString('utf8');
-    //await executeQuery(query);
     console.log('[INITDB] END');
 }
 
