@@ -11,9 +11,7 @@ import { makeEventRefId, makePeopleRefLabelId } from './websocket';
 let labelIdList = [
     100000,
     101000,
-    // 102000,
     103000,
-    // 104000,
     105000,
     106000,
     200000,
@@ -45,7 +43,7 @@ let labelIdList = [
     501000,
     502000,
     600000,
-    601000
+    601000,
 ];
 
 let eventIdList = [0, 1, 2, 4, 8, 16, 32, 64];
